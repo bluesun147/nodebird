@@ -1,8 +1,9 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const session = require('cookie-parser');
-const dotenv = require('dotenv');
+const morgan = require('morgan');
 const path = require('path');
+const session = require('express-session');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
@@ -21,10 +22,10 @@ app.use(morgan('dev'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(express.json);
+app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-app.use(cookieParser(process.env.COOLIE_SECRET));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.use(session({
     resave: false,
@@ -52,5 +53,5 @@ app.use((err, req, res, next) => { // 에러 처리 미들웨어
 });
 
 app.listen(app.get('port'), () => {
-    console.log(app.get('port'), '번 포트에서 대기 중');
+    console.log(app.get('port'), '번 포트에서 대기 중!');
 });

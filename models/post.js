@@ -19,12 +19,12 @@ module.exports = class Post extends Sequelize.Model {
             modelName: 'Post',
             tableName: 'posts',
             paranoid: false,
-            charset: utf8mb4,
+            charset: 'utf8mb4',
             collate: 'utf8mb4_general_ci',
         });
     }
     static associate(db) {
-        db.Post.belongTo(db.User); // 1(User):N(Post) 관계.
+        db.Post.belongsTo(db.User); // 1(User):N(Post) 관계.
 
         // Post와 Hashtag는 N:M 관계
         // N:M이므로 PostHashtag라는 중간 모델 생기고,

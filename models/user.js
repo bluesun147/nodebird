@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 // models/user.js
 // 사용자 정보 저장하는 모델
 module.exports = class User extends Sequelize.Model {
-    static init(sequleize) { // 테이블에 대한 설정
+    static init(sequelize) { // 테이블에 대한 설정
         return super.init({ // 첫번째 인수는 테이블 컬럼 설정
             email: {
                 type: Sequelize.STRING(40),
@@ -33,7 +33,7 @@ module.exports = class User extends Sequelize.Model {
             modelName: 'User',
             tableName: 'users',
             paranoid: true, // deletedAt column이 테이블에 추가됨. 실제 삭제 안됐지만 삭제된 효과
-            charset: utf8,
+            charset: 'utf8',
             collate: 'utf8_general_ci',
         });
     }

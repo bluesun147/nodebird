@@ -1,5 +1,6 @@
 const express = require('express');
 // routes/page.js
+const {isLoggedIn, isNotLoggedIn} = require('./middlewares'); // 접근 권한 제어하는 미들웨어 사용
 const router = express.Router();
 
 // 라우터용 미들웨어 만들어 템플릿 엔진에서 사용할 변수들 res.locals로 설정
@@ -15,7 +16,7 @@ router.use((req, res, next) => {
     
     이렇게하면 템플릿 엔진이 res.locals 객체 읽어서 변수 접어넣음
     */
-    res.locals.user = null;
+    res.locals.user = req.user;
     res.locals.followerCount = 0;
     res.locals.followingCount = 0;
     res.locals.followerIdList = [];
@@ -23,12 +24,12 @@ router.use((req, res, next) => {
 });
 
 // GET /profile
-router.get('/profile', (req, res) => {
+router.get('/profile', isLoggedIn, (req, res) => { // 자신의 프로필은 로그인해야 볼 수 있으므로 isLoggedIn 미들웨어 사용
     res.render('profile', {title: '내 정보 - NodeBird'});
 });
 
 // GET /join
-router.get('/join', (req, res) => {
+router.get('/join', isNotLoggedIn, (req, res) => {
     res.render('join', {title: '회원가입 - NodeBird'});
 });
 

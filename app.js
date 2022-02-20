@@ -3,7 +3,10 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const path = require('path');
 const session = require('express-session');
-const dotenv = require('dotenv');
+const dotenv = require('dotenv'); // env
+
+const passport = require('passport'); //로그인 모듈
+
 // app.js
 dotenv.config();
 
@@ -11,9 +14,12 @@ const pageRouter = require('./routes/page');
 
 const {sequelize} = require('./models'); // models/index.js (index 생략)
 
-const nunjucks = require('nunjucks');
+const passportConfig = require('./passport'); // ./passport/inex.js
+
+const nunjucks = require('nunjucks'); // 템플릿 엔진 넌적스
 
 const app = express();
+passportConfig(); // 패스포트 설정
 app.set('port', process.env.PORT || 8001);
 app.set('view engine', 'html');
 nunjucks.configure('views', {
@@ -47,6 +53,11 @@ app.use(session({
         secure: false,
     },
 }));
+
+app.use(passport.initialize()); // 요청(req)에 passport 설정 심고
+app.use(passport.session()); // req.session 객체에 passport 정보 저장
+// req.session 객체는 express-session에서 생성하는 것이므로
+// passport 미들웨어는 express-session 미들웨어보다 뒤어 연결해야 함.
 
 app.use('/', pageRouter);
 

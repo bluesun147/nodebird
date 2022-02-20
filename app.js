@@ -4,10 +4,13 @@ const morgan = require('morgan');
 const path = require('path');
 const session = require('express-session');
 const dotenv = require('dotenv');
-
+// app.js
 dotenv.config();
 
 const pageRouter = require('./routes/page');
+
+const {sequelize} = require('./models'); // models/index.js (index 생략)
+
 const nunjucks = require('nunjucks');
 
 const app = express();

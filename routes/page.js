@@ -1,6 +1,9 @@
 const express = require('express');
 // routes/page.js
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares'); // 접근 권한 제어하는 미들웨어 사용
+
+const {Post, User} = require('../models');
+
 const router = express.Router();
 
 // 라우터용 미들웨어 만들어 템플릿 엔진에서 사용할 변수들 res.locals로 설정
@@ -41,5 +44,26 @@ router.get('/', (req, res, next) => {
         twits,
     });
 });
+
+// 먼저 db에서 게시글 조회한 뒤 결과를 twits에 넣어 렌더링.
+// 조회 시 게시글 작성자의 아이디와 닉네임 JOIN해서 제공
+router.get('/', async(req, res, next) => {
+    try {
+        const posts = await Post.findAll({
+            include: {
+                model: User,
+                attributes: ['id', 'nick'],
+            },
+            order: [['createAt', 'DESC']],
+        });
+        res.render('main', {
+            title: 'NodeBird',
+            twits: posts,
+        });
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+})
 
 module.exports = router;

@@ -11,6 +11,7 @@ const passport = require('passport'); //로그인 모듈
 dotenv.config();
 
 const pageRouter = require('./routes/page');
+const authRouter = require('./routes/auth'); // 추가한 auth 라우터 app.js에 연결
 
 const {sequelize} = require('./models'); // models/index.js (index 생략)
 
@@ -60,9 +61,10 @@ app.use(passport.session()); // req.session 객체에 passport 정보 저장
 // passport 미들웨어는 express-session 미들웨어보다 뒤어 연결해야 함.
 
 app.use('/', pageRouter);
+app.use('/auth', authRouter);
 
 app.use((req, res, next) => {
-    const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+    const error = new Error(`${req.method} ${req.url} 라우터가 없습니다!`);
     error.status = 404;
     next(error); // 에러 처리 미들웨어로 이동
 })

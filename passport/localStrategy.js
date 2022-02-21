@@ -26,6 +26,8 @@ module.exports = () => {
             } else {
                 done(null, false, {message: '가입되지 않은 회원입니다.'});
             }
+            // done 호출된 후에는 다시 passport.authenticate의 콜백 함수에 나머지 로직 실행 됨.
+            // 로그인에 성공 했다면 메인 페이지로 리다이렉트되면서 로그인 폼 대신 회원 정보 뜸.
         } catch (error) {
             console.error(error);
             done(error);
